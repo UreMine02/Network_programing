@@ -109,7 +109,7 @@ int main()
     for (int i = 0; i < num_drives; i++)
     {
         char drive_letter;
-        int drive_size;
+        unsigned int drive_size;
 
         drive_letter = buf[pos];
         pos++;
@@ -117,7 +117,7 @@ int main()
         memcpy(&drive_size, buf + pos, sizeof(drive_size));
         pos += sizeof(drive_size);
 
-        printf("%c: %dGB\n", drive_letter, drive_size);
+        printf("%c: %oGB\n", drive_letter, drive_size);
     }
 
     close(client);

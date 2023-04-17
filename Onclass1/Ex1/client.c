@@ -48,14 +48,14 @@ int main()
     getchar();
 
     char disk;
-    int disk_size;
+    unsigned int disk_size;
     
     for(int i=0; i<num_disk; i++){
         printf("Nhap ten o dia\n");
         scanf("%c", &disk);
 
         printf("Nhap kich thuoc o dia\n");
-        scanf("%d", &disk_size);
+        scanf("%o", &disk_size);
 
         getchar();
 
