@@ -44,52 +44,81 @@ int main()
     int client = accept(listener, (struct sockaddr *)&clientAddr, &clientAddrLen);
     printf("Client IP: %s:%d\n", inet_ntoa(clientAddr.sin_addr), ntohs(clientAddr.sin_port));
 
-    // char arr[4][100];
-    // int size = sizeof(arr);
-    // int ret = recv(client, arr, size, 0);
-    // printf("MSSV: %s", &arr[0]);
-    // printf("Ho va ten: %s", &arr[1]);
-    // printf("Ngay sinh: %s", &arr[2]);
-    // printf("CPA: %s", &arr[3]);
+    if (client == -1){
+        perror("accept() failed");
+        return 1;
+    }
+    printf("New client connected: %d\n", client);
 
-    char computer[128];
-    int num_disk;
-    char cnum_disk[3];
-    char disk[128];
+    // char computer[128];
+    // int num_disk;
+    // char cnum_disk[3];
+    // char disk[128];
+    // char buf[512];
+    // int tmp;
+    // int tmp2 = 1;  
+
+    // int ret = recv(client, buf, sizeof(buf), 0);
+
+    // for(int i=0; i<sizeof(buf); i++){
+    //     if(isdigit(buf[i])) tmp = i+1;
+    //     break;
+    // }
+
+    // for(int i=0; i<sizeof(buf); i++){
+    //     if(isdigit(buf[i])){
+    //         for(int j=i+1; i<sizeof(buf); i++){
+    //             if(isdigit(buf[j])){
+    //                 tmp2 ++;
+    //             }else break;
+    //         }
+    //     }
+    // }
+
+    // memcpy(computer, buf, tmp);
+    // computer[tmp] = 0;
+    // memcpy(disk, buf + tmp2 + tmp, ret - tmp2 - tmp);
+    // disk[ret - tmp2 - tmp] = 0;
+    // memcpy(cnum_disk, buf + tmp, tmp2);
+    // cnum_disk[tmp2] = 0;
+    // num_disk = atoi(cnum_disk);
+
+    // printf("Ten may tinh");
+    // printf("%s\n", computer);
+    // printf("So o dia");
+    // printf("%d\n", num_disk);
+    // printf("%s", disk);
+
     char buf[512];
-    int tmp;
-    int tmp2 = 1;  
-
     int ret = recv(client, buf, sizeof(buf), 0);
+    
+    buf[ret] = 0;
 
-    for(int i=0; i<sizeof(buf); i++){
-        if(isdigit(buf[i])) tmp = i+1;
-        break;
+    int pos = 0;
+
+    // Tach du lieu tu buffer
+    char computer[64];
+    strcpy(computer, buf);
+
+    pos += strlen(computer) + 1;
+
+    printf("Computer name: %s\n", computer);
+
+
+    int num_drives = (ret - pos) / 4;
+    for (int i = 0; i < num_drives; i++)
+    {
+        char drive_letter;
+        int drive_size;
+
+        drive_letter = buf[pos];
+        pos++;
+
+        memcpy(&drive_size, buf + pos, sizeof(drive_size));
+        pos += sizeof(drive_size);
+
+        printf("%c: %dGB\n", drive_letter, drive_size);
     }
-
-    for(int i=0; i<sizeof(buf); i++){
-        if(isdigit(buf[i])){
-            for(int j=i+1; i<sizeof(buf); i++){
-                if(isdigit(buf[j])){
-                    tmp2 ++;
-                }else break;
-            }
-        }
-    }
-
-    memcpy(computer, buf, tmp);
-    computer[tmp] = 0;
-    memcpy(disk, buf + tmp2 + tmp, ret - tmp2 - tmp);
-    disk[ret - tmp2 - tmp] = 0;
-    memcpy(cnum_disk, buf + tmp, tmp2);
-    cnum_disk[tmp2] = 0;
-    num_disk = atoi(cnum_disk);
-
-    printf("Ten may tinh");
-    printf("%s\n", computer);
-    printf("So o dia");
-    printf("%d\n", num_disk);
-    printf("%s", disk);
 
     close(client);
     close(listener);

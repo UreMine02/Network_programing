@@ -25,25 +25,44 @@ int main()
     }
 
     char buf[512];
-    char computer[128];
+    char computer[64];
     int num_disk;
-    char disk[128];
     
 
     // Nhap du lieu va dong goi
-    printf("Nhap ten may tinh: \n");
-    fgets(computer, sizeof(computer), stdin);
+    // Nhap ten may tinh
+    printf("Nhap ten may tinh: ");
+    scanf("%s", computer);
 
-    printf("So o dia: \n");
+    // Xoa \n trong bo dem
+    getchar();
+
+    // Chuyen vao buffer
+    strcpy(buf, computer);
+    int pos = strlen(computer);
+    buf[pos] = 0;
+    pos++;
+
+    printf("Nhap vao so o dia: \n");
     scanf("%d", &num_disk);
-    // getchar();
-    sprintf(buf,"%s %d", computer, num_disk);
-    for(int i = 0; i < num_disk; i++) {
-        char disk[10];
-        fgets(disk, sizeof(disk), stdin);
-        // fflush;
-        // sprintf(buf,"%s %s",buf, disk);
-        strcat(buf, disk);
+    getchar();
+
+    char disk;
+    int disk_size;
+    
+    for(int i=0; i<num_disk; i++){
+        printf("Nhap ten o dia\n");
+        scanf("%c", &disk);
+
+        printf("Nhap kich thuoc o dia\n");
+        scanf("%d", &disk_size);
+
+        getchar();
+
+        buf[pos] = disk;
+        pos++;
+        memcpy(buf + pos, &disk_size, sizeof(disk_size));
+        pos += sizeof(disk_size);
     }
     
 
@@ -51,8 +70,10 @@ int main()
     // getchar();
 
     // sprintf(buf,"%s %d %s", computer, num_disk, disk);
-    send(client, buf, sizeof(buf), 0);
 
+    printf("Buffer size: %d\n", pos);
+
+    send(client, buf, pos, 0);
     
     close(client);
 }
