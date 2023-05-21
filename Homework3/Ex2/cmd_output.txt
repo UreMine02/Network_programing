@@ -1,0 +1,2 @@
+ 20:50:53 up  1:13,  0 users,  load average: 0.00, 0.04, 0.06
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
