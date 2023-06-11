@@ -1,0 +1,4 @@
+admin admin
+guest nopass
+user1@gmail.com password123
+user2 aes256cbc
